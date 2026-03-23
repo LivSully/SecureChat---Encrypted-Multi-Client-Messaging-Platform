@@ -4,59 +4,62 @@
 
 
 */
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-public class CSC_Client_Draft {
-    public static void main(String[] args) {
-        String serverAddress = "127.0.0.1";
-        int port = 5000;
+public class CHAT_CLIENT_TEST {
+    private Socket socket;
+    private PrintWriter out;
+    private BufferedReader in;
+    private CHAT_GUI_TEST gui;
+    // private final String IP_ADDRESS = "127.0.0.1";
+    private static final int port = 5000;
 
+    public CHAT_CLIENT_TEST(String host, int port, CHAT_GUI_TEST gui) throws IOException {
+        this.gui = gui;
+        socket = new Socket(host, port);
+
+        out = new PrintWriter(socket.getOutputStream(), true);
+        in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        new Thread(new ClientListener()).start();
+    }
+
+    public void sendMessage(String plaintext) {
         try {
-            Socket socket = new Socket(serverAddress, port);
-            System.out.println("Connected to server at " + serverAddress + ":" + port);
+            String encrypted = AESUtil.encrypt(plaintext);
+            out.println(encrypted);
+        } catch (Exception e) {
+            gui.appendMessage("Encryption error");
+        }
+    }
 
-            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
-
-            System.out.print("Enter your username: ");
-            String username = consoleInput.readLine();
-            output.println(username);
-
-            Thread listener = new Thread(() -> {
-                try {
-                    String serverMessage;
-                    while ((serverMessage = input.readLine()) != null) {
-                        System.out.println("\n" + serverMessage);
-                        System.out.print("You: ");
+    private class ClientListener implements Runnable {
+        public void run() {
+            try {
+                String encryptedMsg;
+                while ((encryptedMsg = in.readLine()) != null) {
+                    try {
+                        String decrypted = AESUtil.decrypt(encryptedMsg);
+                        gui.appendMessage(decrypted);
+                    } catch (Exception e) {
+                        gui.appendMessage("[Error decrypting message]");
                     }
-                } catch (IOException e) {
-                    System.out.println("\nConnection closed.");
                 }
-            });
-
-            listener.start();
-
-            String message;
-            while (true) {
-                System.out.print("You: ");
-                message = consoleInput.readLine();
-
-                if (message == null) {
-                    break;
-                }
-
-                output.println(message);
-
-                if (message.equalsIgnoreCase("exit")) {
-                    break;
-                }
+            } catch (IOException e) {
+                gui.appendMessage("Disconnected from server.");
             }
-
-            socket.close();
+        }
+    }
+    public static void main(String[] args) {
+        CHAT_GUI_TEST gui = new CHAT_GUI_TEST();
+        try {
+            // ip address goes where localhost is
+            gui.connect("localhost", port);
         } catch (IOException e) {
-            System.out.println("Unable to connect to server.");
             e.printStackTrace();
         }
     }
