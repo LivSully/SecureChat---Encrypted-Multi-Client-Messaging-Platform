@@ -20,12 +20,18 @@ public class CSC_Client_GUI_Draft {
         chatArea = new JTextArea(20, 50);
         chatArea.setEditable(false);
         inputField = new JTextField(50);
+
+        ImageIcon logo = new ImageIcon("CoolSecureChatLogo.png");
+        Image img = logo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        JLabel lblLogo = new JLabel(new ImageIcon(img));
+        lblLogo.setHorizontalAlignment(JLabel.CENTER);
         
         JButton sendButton = new JButton("Send");
         JButton clearButton = new JButton("Clear");
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
+        panel.add(lblLogo, BorderLayout.NORTH);
         panel.add(inputField, BorderLayout.CENTER);
         panel.add(sendButton, BorderLayout.SOUTH);
         panel.add(clearButton, BorderLayout.EAST);
