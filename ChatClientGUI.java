@@ -59,7 +59,7 @@ public class ChatClientGUI extends JFrame {
     }
 
     public void appendMessage(String msg) {
-        chatArea.append(msg + "\n");
+    SwingUtilities.invokeLater(() -> chatArea.append(msg + "\n"));
     }
 
 }
