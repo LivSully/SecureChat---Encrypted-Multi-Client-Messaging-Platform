@@ -14,26 +14,30 @@ public class ChatClientGUI extends JFrame {
     private JButton clearButton;
     private JButton logoutButton;
     private JLabel statusIndicator;
-    
+
     public ChatClientGUI(String username) {
         this.username = username;
+
         ImageIcon logo = new ImageIcon("CoolSecureChatLogo.png");
-        // Image img = logo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        JLabel lblLogo = new JLabel(logo);
+        Image img = logo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        JLabel lblLogo = new JLabel(new ImageIcon(img));
         lblLogo.setHorizontalAlignment(JLabel.CENTER);
-        // add(lblLogo, BorderLayout.NORTH);
+        add(lblLogo, BorderLayout.NORTH);
 
         chatArea = new JTextArea();
         chatArea.setEditable(false);
         inputField = new JTextField();
+
         sendButton = new JButton("Send");
         clearButton = new JButton("Clear");
         logoutButton = new JButton("Logout");
+
         statusIndicator = new JLabel();
         statusIndicator.setOpaque(true);
         statusIndicator.setBackground(Color.RED);
         statusIndicator.setPreferredSize(new Dimension(15, 15));
         statusIndicator.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
         inputField.addActionListener(e -> {
             String msg = inputField.getText();
             client.sendMessage(msg); // plaintext → encrypted inside client
@@ -79,7 +83,7 @@ public class ChatClientGUI extends JFrame {
     }
 
     public void appendMessage(String msg) {
-    SwingUtilities.invokeLater(() -> chatArea.append(msg + "\n"));
+        SwingUtilities.invokeLater(() -> chatArea.append(msg + "\n"));
     }
 
     public JLabel getStatusIndicator() {
