@@ -154,37 +154,46 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
 
     // Method to Login User
     private void loginUser() {
-        String username = txtUser.getText();
+    String username = txtUser.getText();
 
-        String password = new String(txtPass.getPassword());
+    String password = new String(txtPass.getPassword());
 
-        boolean success = false;
-
-        try (Scanner sc = new Scanner(new File("credentials.txt"))) {
-            while (sc.hasNextLine()) {
-                String[] credentials = sc.nextLine().split(",");
-                if (credentials[0].equals(username) && credentials[1].equals(password)) {
-                    success = true;
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            showMessage("Error", "User data file not found!", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (success) {
-            showMessage("Login Successful", "Welcome, " + username + "!", JOptionPane.INFORMATION_MESSAGE);
-            try {
-                new ChatClientGUI(username).connect("127.0.0.1", 1111); // opens up chat window
-            } catch (IOException e) {
-                showMessage("Error", "Failed to connect to chat server.", JOptionPane.ERROR_MESSAGE);
-            }
-            dispose(); // Close login window
-        } else {
-            showMessage("Login Failed", "Invalid username or password.", JOptionPane.ERROR_MESSAGE);
-        }
+    if (!username.matches("^\\w{4,16}$")) {
+        showMessage("Error", "Invalid username format.", JOptionPane.ERROR_MESSAGE);
+        return;
     }
+    if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$")) {
+        showMessage("Error", "Invalid password format.", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    boolean success = false;
+
+    try (Scanner sc = new Scanner(new File("credentials.txt"))) {
+        while (sc.hasNextLine()) {
+            String[] credentials = sc.nextLine().split(",");
+            if (credentials[0].equals(username) && credentials[1].equals(password)) {
+                success = true;
+                break;
+            }
+        }
+    } catch (Exception ex) {
+        showMessage("Error", "User data file not found!", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    if (success) {
+        showMessage("Login Successful", "Welcome, " + username + "!", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            ChatClientGUI chatGUI = new ChatClientGUI(username);
+            chatGUI.connect("127.0.0.1", 1111);
+            dispose();
+        } catch (IOException e) {
+            showMessage("Error", "Failed to connect to chat server.", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        showMessage("Login Failed", "Invalid username or password.", JOptionPane.ERROR_MESSAGE);
+    }
+}
 
     // Method to Show Message Dialog
     private void showMessage(String title, String message, int messageType) {
