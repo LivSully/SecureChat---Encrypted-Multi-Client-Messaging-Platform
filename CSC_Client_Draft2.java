@@ -16,11 +16,13 @@ public class CSC_Client_Draft2 {
     private PrintWriter out;
     private BufferedReader in;
     private ChatClientGUI gui;
+    private String username;
     private static final String IP_ADDRESS = "127.0.0.1";
     private static final int port = 1111;
 
-    public CSC_Client_Draft2(String host, int port, ChatClientGUI gui) throws IOException {
+    public CSC_Client_Draft2(String host, int port, ChatClientGUI gui, String username) throws IOException {
         this.gui = gui;
+        this.username = username;
         socket = new Socket(host, port);
 
         out = new PrintWriter(socket.getOutputStream(), true);
@@ -31,7 +33,8 @@ public class CSC_Client_Draft2 {
 
     public void sendMessage(String plaintext) {
         try {
-            String encrypted = AESUtil.encrypt(plaintext);
+            String fullMessage = username + ": " + plaintext;
+            String encrypted = AESUtil.encrypt(fullMessage);
             out.println(encrypted);
         } catch (Exception e) {
             gui.appendMessage("Encryption error");
@@ -57,7 +60,7 @@ public class CSC_Client_Draft2 {
     }
 
     public static void main(String[] args) {
-        ChatClientGUI gui = new ChatClientGUI();
+        ChatClientGUI gui = new ChatClientGUI("User");
         try {
             // ip address goes where localhost is
             gui.connect(IP_ADDRESS, port);

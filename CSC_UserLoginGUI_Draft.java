@@ -175,7 +175,11 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
 
         if (success) {
             showMessage("Login Successful", "Welcome, " + username + "!", JOptionPane.INFORMATION_MESSAGE);
-            new ChatClientGUI(); // opens up chat window
+            try {
+                new ChatClientGUI(username).connect("127.0.0.1", 1111); // opens up chat window
+            } catch (IOException e) {
+                showMessage("Error", "Failed to connect to chat server.", JOptionPane.ERROR_MESSAGE);
+            }
             dispose(); // Close login window
         } else {
             showMessage("Login Failed", "Invalid username or password.", JOptionPane.ERROR_MESSAGE);

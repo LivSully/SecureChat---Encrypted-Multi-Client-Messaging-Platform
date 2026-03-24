@@ -9,16 +9,17 @@ public class ChatClientGUI extends JFrame {
     private JTextArea chatArea;
     private JTextField inputField;
     private CSC_Client_Draft2 client;
+    private String username;
     private JButton sendButton;
     private JButton clearButton;
 
-    public ChatClientGUI() {
-
+    public ChatClientGUI(String username) {
+        this.username = username;
         ImageIcon logo = new ImageIcon("CoolSecureChatLogo.png");
         // Image img = logo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         JLabel lblLogo = new JLabel(logo);
         lblLogo.setHorizontalAlignment(JLabel.CENTER);
-        //add(lblLogo, BorderLayout.NORTH);
+        // add(lblLogo, BorderLayout.NORTH);
 
         chatArea = new JTextArea();
         chatArea.setEditable(false);
@@ -54,7 +55,7 @@ public class ChatClientGUI extends JFrame {
     }
 
     public void connect(String host, int port) throws IOException {
-        client = new CSC_Client_Draft2(host, port, this);
+        client = new CSC_Client_Draft2(host, port, this, username);
     }
 
     public void appendMessage(String msg) {
