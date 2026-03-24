@@ -5,11 +5,14 @@ This ONE
 
 
 */
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+import javax.swing.SwingUtilities;
 
 public class Client {
     private Socket socket;
@@ -53,9 +56,28 @@ public class Client {
                         gui.appendMessage("[Error decrypting message]");
                     }
                 }
+                SwingUtilities.invokeLater(() -> {
+                    gui.getStatusIndicator().setBackground(Color.RED);
+                });
             } catch (IOException e) {
                 gui.appendMessage("Disconnected from server.");
             }
+        }
+    }
+
+    public void disconnect() {
+        try {
+            if (out != null) {
+                out.close();
+            }
+            if (in != null) {
+                in.close();
+            }
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
