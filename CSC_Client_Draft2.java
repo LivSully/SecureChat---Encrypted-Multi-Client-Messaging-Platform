@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class CHAT_CLIENT_TEST {
+public class CSC_Client_Draft2 {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
