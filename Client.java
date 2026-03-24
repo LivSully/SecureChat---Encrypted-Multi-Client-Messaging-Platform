@@ -34,9 +34,16 @@ public class Client {
         new Thread(new ClientListener()).start();
     }
 
+    public class MessageFactory {
+
+        public static String createFormattedMessage(String username, String message) {
+            return username + ": " + message;
+        }
+    }
+
     public void sendMessage(String plaintext) {
         try {
-            String fullMessage = username + ": " + plaintext;
+            String fullMessage = MessageFactory.createFormattedMessage(username, plaintext);
             String encrypted = AESUtil.encrypt(fullMessage);
             out.println(encrypted);
         } catch (Exception e) {
