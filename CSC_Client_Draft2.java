@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client {
+public class CSC_Client_Draft2 {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
@@ -20,7 +20,7 @@ public class Client {
     private static final String IP_ADDRESS = "10.1.37.88";
     private static final int port = 1111;
 
-    public Client(String host, int port, ChatClientGUI gui, String username) throws IOException {
+    public CSC_Client_Draft2(String host, int port, ChatClientGUI gui, String username) throws IOException {
         this.gui = gui;
         this.username = username;
         socket = new Socket(host, port);

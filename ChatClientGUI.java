@@ -8,7 +8,7 @@ import java.awt.*;
 public class ChatClientGUI extends JFrame {
     private JTextArea chatArea;
     private JTextField inputField;
-    private Client client;
+    private CSC_Client_Draft2 client;
     private String username;
     private JButton sendButton;
     private JButton clearButton;
@@ -55,7 +55,7 @@ public class ChatClientGUI extends JFrame {
     }
 
     public void connect(String host, int port) throws IOException {
-        client = new Client(host, port, this, username);
+        client = new CSC_Client_Draft2(host, port, this, username);
     }
 
     public void appendMessage(String msg) {
