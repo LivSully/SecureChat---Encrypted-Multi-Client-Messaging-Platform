@@ -1,6 +1,6 @@
 /*
 
-
+This ONE
 
 
 */
@@ -14,11 +14,11 @@ public class CSC_Client_Draft2 {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
-    private CHAT_GUI_TEST gui;
-    // private final String IP_ADDRESS = "127.0.0.1";
-    private static final int port = 5000;
+    private ChatClientGUI gui;
+    private static final String IP_ADDRESS = "10.2.130.178";
+    private static final int port = 1111;
 
-    public CHAT_CLIENT_TEST(String host, int port, CHAT_GUI_TEST gui) throws IOException {
+    public CSC_Client_Draft2(String host, int port, ChatClientGUI gui) throws IOException {
         this.gui = gui;
         socket = new Socket(host, port);
 
@@ -55,10 +55,10 @@ public class CSC_Client_Draft2 {
         }
     }
     public static void main(String[] args) {
-        CHAT_GUI_TEST gui = new CHAT_GUI_TEST();
+        ChatClientGUI gui = new ChatClientGUI();
         try {
             // ip address goes where localhost is
-            gui.connect("localhost", port);
+            gui.connect(IP_ADDRESS,port);
         } catch (IOException e) {
             e.printStackTrace();
         }
