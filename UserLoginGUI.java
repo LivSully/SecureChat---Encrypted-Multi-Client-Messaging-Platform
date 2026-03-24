@@ -12,14 +12,14 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.Scanner;
 
-public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
+public class UserLoginGUI extends JFrame implements ActionListener {
     // Components for Login Forms
     private JTextField txtUser;
     private JPasswordField txtPass;
     private JButton btnLogin;
     private JLabel lblUserStatus, lblPassStatus;
 
-    public CSC_UserLoginGUI_Draft() {
+    public UserLoginGUI() {
         setTitle("Sign In to Cool Secure Chat!");
         setSize(475, 350);
         setLayout(new BorderLayout(10, 10)); // Using BorderLayout for better structure
@@ -201,6 +201,6 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new CSC_UserLoginGUI_Draft();
+        new UserLoginGUI();
     }
 }

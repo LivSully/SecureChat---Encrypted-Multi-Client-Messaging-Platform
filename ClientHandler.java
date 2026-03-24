@@ -6,11 +6,11 @@ import java.net.Socket;
 
 public class ClientHandler implements Runnable {
     private Socket socket;
-    private CSC_Server server;
+    private Server server;
     private PrintWriter out;
     private BufferedReader in;
 
-    public ClientHandler(Socket socket, CSC_Server server) {
+    public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
     }
