@@ -8,11 +8,13 @@ import java.awt.*;
 public class ChatClientGUI extends JFrame {
     private JTextArea chatArea;
     private JTextField inputField;
-    private Client client;
+    private CSC_Client_Draft2 client;
     private String username;
     private JButton sendButton;
     private JButton clearButton;
-
+    private JButton logoutButton;
+    private JLabel statusIndicator;
+    
     public ChatClientGUI(String username) {
         this.username = username;
         ImageIcon logo = new ImageIcon("CoolSecureChatLogo.png");
@@ -26,6 +28,12 @@ public class ChatClientGUI extends JFrame {
         inputField = new JTextField();
         sendButton = new JButton("Send");
         clearButton = new JButton("Clear");
+        logoutButton = new JButton("Logout");
+        statusIndicator = new JLabel();
+        statusIndicator.setOpaque(true);
+        statusIndicator.setBackground(Color.RED);
+        statusIndicator.setPreferredSize(new Dimension(15, 15));
+        statusIndicator.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         inputField.addActionListener(e -> {
             String msg = inputField.getText();
             client.sendMessage(msg); // plaintext → encrypted inside client
@@ -39,27 +47,42 @@ public class ChatClientGUI extends JFrame {
         clearButton.addActionListener(e -> {
             chatArea.setText("");
         });
+        logoutButton.addActionListener(e -> {
+            if (client != null) {
+                client.disconnect();
+            }
+            statusIndicator.setBackground(Color.RED);
+            appendMessage("You have logged out");
+        });
         add(new JScrollPane(chatArea), BorderLayout.CENTER);
         add(inputField, BorderLayout.SOUTH);
         JPanel bottomPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel();
+        JPanel statusPanel = new JPanel();
         // JPanel topPanel = new JPanel(new BorderLayout());
         buttonPanel.add(sendButton);
         buttonPanel.add(clearButton);
+        buttonPanel.add(logoutButton);
         // topPanel.add(lblLogo);
+        bottomPanel.add(statusPanel, BorderLayout.WEST);
         bottomPanel.add(inputField, BorderLayout.CENTER);
         bottomPanel.add(buttonPanel, BorderLayout.EAST);
+        statusPanel.add(statusIndicator);
         add(bottomPanel, BorderLayout.SOUTH);
         setSize(400, 500);
         setVisible(true);
     }
 
     public void connect(String host, int port) throws IOException {
-        client = new Client(host, port, this, username);
+        client = new CSC_Client_Draft2(host, port, this, username);
+        statusIndicator.setBackground(Color.GREEN);
     }
 
     public void appendMessage(String msg) {
-        SwingUtilities.invokeLater(() -> chatArea.append(msg + "\n"));
+    SwingUtilities.invokeLater(() -> chatArea.append(msg + "\n"));
     }
 
+    public JLabel getStatusIndicator() {
+        return statusIndicator;
+    }
 }
