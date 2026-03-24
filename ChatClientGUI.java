@@ -18,7 +18,7 @@ public class ChatClientGUI extends JFrame {
         // Image img = logo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         JLabel lblLogo = new JLabel(logo);
         lblLogo.setHorizontalAlignment(JLabel.CENTER);
-        add(lblLogo, BorderLayout.NORTH);
+        //add(lblLogo, BorderLayout.NORTH);
 
         chatArea = new JTextArea();
         chatArea.setEditable(false);
@@ -39,7 +39,7 @@ public class ChatClientGUI extends JFrame {
             chatArea.setText("");
         });
         add(new JScrollPane(chatArea), BorderLayout.CENTER);
-        // add(inputField, BorderLayout.SOUTH);
+        add(inputField, BorderLayout.SOUTH);
         JPanel bottomPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel();
         // JPanel topPanel = new JPanel(new BorderLayout());
