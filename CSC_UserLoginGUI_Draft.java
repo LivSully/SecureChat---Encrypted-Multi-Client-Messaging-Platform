@@ -62,17 +62,14 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
 
             public void insertUpdate(DocumentEvent e) {
                 validateUsername();
-                validatePassword();
             }
 
             public void removeUpdate(DocumentEvent e) {
                 validateUsername();
-                validatePassword();
             }
 
             public void changedUpdate(DocumentEvent e) {
                 validateUsername();
-                validatePassword();
             }
 
         });
@@ -87,6 +84,20 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
         JLabel lblPass = new JLabel("Password:");
         txtPass = new JPasswordField(25);
         txtPass.setEchoChar('*'); // Mask password input
+
+        txtPass.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                validatePassword();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                validatePassword();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                validatePassword();
+            }
+        });
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -164,6 +175,8 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
 
         if (success) {
             showMessage("Login Successful", "Welcome, " + username + "!", JOptionPane.INFORMATION_MESSAGE);
+            // new CHAT_GUI_TEST(username); //opens up chat window
+            dispose(); // Close login window
         } else {
             showMessage("Login Failed", "Invalid username or password.", JOptionPane.ERROR_MESSAGE);
         }
