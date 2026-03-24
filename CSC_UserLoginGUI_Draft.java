@@ -6,6 +6,7 @@ Data Storage:
  */
 
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -16,10 +17,11 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
     private JTextField txtUser;
     private JPasswordField txtPass;
     private JButton btnLogin;
+    private JLabel lblUserStatus, lblPassStatus;
 
     public CSC_UserLoginGUI_Draft() {
         setTitle("Sign In to Cool Secure Chat!");
-        setSize(450, 300);
+        setSize(475, 350);
         setLayout(new BorderLayout(10, 10)); // Using BorderLayout for better structure
 
         // Creating Panels
@@ -28,7 +30,7 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
 
         // Constraints for GridBagLayout
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(5, 20, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
         ImageIcon logo = new ImageIcon("CoolSecureChatLogo.png");
@@ -40,7 +42,40 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
 
         // Username Label & TextField
         JLabel lblUser = new JLabel("Username:");
-        txtUser = new JTextField(15);
+        txtUser = new JTextField(25);
+
+        lblUserStatus = new JLabel(" ");
+        lblPassStatus = new JLabel(" ");
+
+        Dimension statusSize = new Dimension(320, 20);
+        lblUserStatus.setPreferredSize(statusSize);
+        lblPassStatus.setPreferredSize(statusSize);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.weightx = 1.0;
+        mainPanel.add(lblUserStatus, gbc);
+        gbc.gridy = 3;
+        mainPanel.add(lblPassStatus, gbc);
+
+        txtUser.getDocument().addDocumentListener(new DocumentListener() {
+
+            public void insertUpdate(DocumentEvent e) {
+                validateUsername();
+                validatePassword();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                validateUsername();
+                validatePassword();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                validateUsername();
+                validatePassword();
+            }
+
+        });
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -50,7 +85,7 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
 
         // Password Label & PasswordField (Masked)
         JLabel lblPass = new JLabel("Password:");
-        txtPass = new JPasswordField(15);
+        txtPass = new JPasswordField(25);
         txtPass.setEchoChar('*'); // Mask password input
 
         gbc.gridx = 0;
@@ -82,10 +117,36 @@ public class CSC_UserLoginGUI_Draft extends JFrame implements ActionListener {
         }
     }
 
+    private void validateUsername() {
+        String username = txtUser.getText();
+
+        if (username.matches("^\\w{4,16}$")) {
+            lblUserStatus.setText("Valid username");
+            lblUserStatus.setForeground(Color.GREEN.darker());
+        } else {
+            lblUserStatus.setText("User: 4-16 characters (a-Z, 0-9, or _)");
+            lblUserStatus.setForeground(Color.RED);
+        }
+    }
+
+    private void validatePassword() {
+        String password = new String(txtPass.getPassword());
+
+        if (password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$")) {
+            lblPassStatus.setText("Valid password");
+            lblPassStatus.setForeground(Color.GREEN.darker());
+        } else {
+            lblPassStatus.setText("Pass: 8–20 characters (a-Z, 0-9, and @$!%*?&)");
+            lblPassStatus.setForeground(Color.RED);
+        }
+    }
+
     // Method to Login User
     private void loginUser() {
         String username = txtUser.getText();
+
         String password = new String(txtPass.getPassword());
+
         boolean success = false;
 
         try (Scanner sc = new Scanner(new File("credentials.txt"))) {
