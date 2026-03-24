@@ -7,6 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
+    private static Server instance;
+
+    public static Server getInstance() {
+        if (instance == null)
+            instance = new Server();
+        return instance;
+    }
+
     private ServerSocket serverSocket;
     private final List<ClientHandler> clients = new ArrayList<>();
     private BufferedWriter logWriter;
