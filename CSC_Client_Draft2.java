@@ -17,7 +17,7 @@ public class CSC_Client_Draft2 {
     private BufferedReader in;
     private ChatClientGUI gui;
     private String username;
-    private static final String IP_ADDRESS = "127.0.0.1";
+    private static final String IP_ADDRESS = "10.1.37.88";
     private static final int port = 1111;
 
     public CSC_Client_Draft2(String host, int port, ChatClientGUI gui, String username) throws IOException {
