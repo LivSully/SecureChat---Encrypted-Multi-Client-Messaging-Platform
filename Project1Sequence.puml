@@ -1,0 +1,42 @@
+@startuml secureChat
+
+actor user1
+actor user2
+actor user3
+actor user4
+actor user5
+actor user6
+actor user7
+actor user8
+actor user9
+actor user10
+actor serverModerator
+
+user1 -> serverModerator: Login
+user2 -> serverModerator: Login
+user3 -> serverModerator: Login
+user4 -> serverModerator: Login
+user5 -> serverModerator: Login
+user6 -> serverModerator: Login
+user7 -> serverModerator: Login
+user8 -> serverModerator: Login
+user9 -> serverModerator: Login
+user10 -> serverModerator: Login
+alt validPassword
+    user1 -> user2: sendMessage
+    user2 -> user1: receiveMessage
+    user1 -> serverModerator: Logout
+    user2 -> serverModerator: Logout
+    user3 -> serverModerator: Logout
+    user4 -> serverModerator: Logout
+    user5 -> serverModerator: Logout
+    user6 -> serverModerator: Logout
+    user7 -> serverModerator: Logout
+    user8 -> serverModerator: Logout
+    user1 -> serverModerator: Logout
+    user2 -> serverModerator: Logout
+else invalidPassword
+    serverModerator -> user1: loginUnsuccessful
+end
+
+@enduml
