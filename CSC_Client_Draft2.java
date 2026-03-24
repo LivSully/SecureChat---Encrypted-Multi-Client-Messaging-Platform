@@ -1,3 +1,4 @@
+
 /*
 
 This ONE
@@ -15,7 +16,7 @@ public class CSC_Client_Draft2 {
     private PrintWriter out;
     private BufferedReader in;
     private ChatClientGUI gui;
-    private static final String IP_ADDRESS = "10.2.130.178";
+    private static final String IP_ADDRESS = "127.0.0.1";
     private static final int port = 1111;
 
     public CSC_Client_Draft2(String host, int port, ChatClientGUI gui) throws IOException {
@@ -23,7 +24,7 @@ public class CSC_Client_Draft2 {
         socket = new Socket(host, port);
 
         out = new PrintWriter(socket.getOutputStream(), true);
-        in  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         new Thread(new ClientListener()).start();
     }
@@ -54,11 +55,12 @@ public class CSC_Client_Draft2 {
             }
         }
     }
+
     public static void main(String[] args) {
         ChatClientGUI gui = new ChatClientGUI();
         try {
             // ip address goes where localhost is
-            gui.connect(IP_ADDRESS,port);
+            gui.connect(IP_ADDRESS, port);
         } catch (IOException e) {
             e.printStackTrace();
         }
