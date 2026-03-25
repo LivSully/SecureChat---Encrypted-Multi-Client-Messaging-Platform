@@ -15,6 +15,7 @@ public class ChatClientGUI extends JFrame {
     private JButton clearButton;
     private JButton logoutButton;
     private JLabel statusIndicator;
+    private ChatController controller;
 
     public ChatClientGUI(String username) {
         this.username = username;
@@ -41,12 +42,12 @@ public class ChatClientGUI extends JFrame {
 
         inputField.addActionListener(e -> {
             String msg = inputField.getText();
-            client.sendMessage(msg); // plaintext → encrypted inside client
+            controller.sendMessage(msg);
             inputField.setText("");
         });
         sendButton.addActionListener(e -> {
             String msg = inputField.getText();
-            client.sendMessage(msg);
+            controller.sendMessage(msg);
             inputField.setText("");
         });
         clearButton.addActionListener(e -> {
@@ -54,7 +55,7 @@ public class ChatClientGUI extends JFrame {
         });
         logoutButton.addActionListener(e -> {
             if (client != null) {
-                client.disconnect();
+                controller.disconnect();
             }
             statusIndicator.setBackground(Color.RED);
             appendMessage("You have logged out");
@@ -80,6 +81,7 @@ public class ChatClientGUI extends JFrame {
 
     public void connect(String host, int port) throws IOException {
         client = new Client(host, port, this, username);
+        controller = new ChatController(client);
         statusIndicator.setBackground(Color.GREEN);
     }
 
@@ -89,5 +91,21 @@ public class ChatClientGUI extends JFrame {
 
     public JLabel getStatusIndicator() {
         return statusIndicator;
+    }
+
+    public class ChatController {
+        private Client client;
+    
+        public ChatController(Client client) {
+            this.client = client;
+        }
+
+        public void sendMessage(String message) {
+            client.sendMessage(message);
+        }
+
+        public void disconnect() {
+            client.disconnect();
+        }
     }
 }
