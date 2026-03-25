@@ -1,3 +1,5 @@
+package src;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
@@ -11,6 +13,7 @@ public class AESUtil {
 
     /**
      * Encrypts a plain text string using AES.
+     * 
      * @param data The plain text to encrypt.
      * @return The encrypted Base64-encoded string.
      */
@@ -24,6 +27,7 @@ public class AESUtil {
 
     /**
      * Decrypts an AES-encrypted Base64 string.
+     * 
      * @param encryptedData The Base64-encoded encrypted text.
      * @return The decrypted plain text.
      */
