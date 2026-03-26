@@ -18,10 +18,11 @@ public class AESUtil {
      * @return The encrypted Base64-encoded string.
      */
     public static String encrypt(String data) throws Exception {
-        SecretKeySpec key = new SecretKeySpec(KEY.getBytes(), ALGORITHM);
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte[] encrypted = cipher.doFinal(data.getBytes());
+        SecretKeySpec key = new SecretKeySpec(KEY.getBytes(), ALGORITHM); // Create a secret key specification based on
+                                                                          // the provided key
+        Cipher cipher = Cipher.getInstance(ALGORITHM); // Get a cipher instance for AES
+        cipher.init(Cipher.ENCRYPT_MODE, key); // Initialize the cipher in encryption mode with the secret key
+        byte[] encrypted = cipher.doFinal(data.getBytes()); // Perform the encryption operation
         return Base64.getEncoder().encodeToString(encrypted); // Encode to Base64 for safe transmission
     }
 
@@ -31,7 +32,7 @@ public class AESUtil {
      * @param encryptedData The Base64-encoded encrypted text.
      * @return The decrypted plain text.
      */
-    public static String decrypt(String encryptedData) throws Exception {
+    public static String decrypt(String encryptedData) throws Exception { // the encryption method but in reverse
         SecretKeySpec key = new SecretKeySpec(KEY.getBytes(), ALGORITHM);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, key);
