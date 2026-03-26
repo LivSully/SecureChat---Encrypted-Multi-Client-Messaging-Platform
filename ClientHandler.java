@@ -1,4 +1,3 @@
-package src;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,23 +11,26 @@ public class ClientHandler implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
 
-    // Constructor method 
+    // Constructor method
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
     }
 
-    // Method that listens for incoming messages from the client, and when a message is received, it broadcasts the message to all clients through the server.
+    // Method that listens for incoming messages from the client, and when a message
+    // is received, it broadcasts the message to all clients through the server.
     @Override
     public void run() {
         try {
-            // Sets up the input and output streams so the clients can communicate with the server
+            // Sets up the input and output streams so the clients can communicate with the
+            // server
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             String encryptedMsg;
             // Listens for an incoming, encrypted message from the client
-            // When the encrypted message is received, it is broadcasted to all of the clients connected to the server
+            // When the encrypted message is received, it is broadcasted to all of the
+            // clients connected to the server
             while ((encryptedMsg = in.readLine()) != null) {
                 server.broadcast(encryptedMsg, this);
             }

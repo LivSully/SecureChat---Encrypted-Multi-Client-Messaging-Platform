@@ -1,10 +1,3 @@
-package src;
-/* 
-Data Storage:
-    Credentials are stored in credentials.txt in the format:
-    user1,password1
-    user2,password2
- */
 
 import javax.swing.*;
 import javax.swing.event.*;
