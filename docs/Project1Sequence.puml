@@ -1,42 +1,73 @@
 @startuml secureChat
 
-actor user1
-actor user2
-actor user3
-actor user4
-actor user5
-actor user6
-actor user7
-actor user8
-actor user9
-actor user10
-actor serverModerator
+actor client1
+actor client2
+actor client3
+actor client4
+actor client5
+actor client6
+actor client7
+actor client8
+actor client9
+actor client10
+actor server
 
-user1 -> serverModerator: Login
-user2 -> serverModerator: Login
-user3 -> serverModerator: Login
-user4 -> serverModerator: Login
-user5 -> serverModerator: Login
-user6 -> serverModerator: Login
-user7 -> serverModerator: Login
-user8 -> serverModerator: Login
-user9 -> serverModerator: Login
-user10 -> serverModerator: Login
-alt validPassword
-    user1 -> user2: sendMessage
-    user2 -> user1: receiveMessage
-    user1 -> serverModerator: Logout
-    user2 -> serverModerator: Logout
-    user3 -> serverModerator: Logout
-    user4 -> serverModerator: Logout
-    user5 -> serverModerator: Logout
-    user6 -> serverModerator: Logout
-    user7 -> serverModerator: Logout
-    user8 -> serverModerator: Logout
-    user1 -> serverModerator: Logout
-    user2 -> serverModerator: Logout
+client1 -> server: Login
+client2 -> server: Login
+client3 -> server: Login
+client4 -> server: Login
+client5 -> server: Login
+client6 -> server: Login
+client7 -> server: Login
+client8 -> server: Login
+client9 -> server: Login
+client10 -> server: Login
+
+alt valid password
+    server -> client1: Login Successful
+    server -> client2: Login Successful
+    server -> client3: Login Successful
+    server -> client4: Login Successful
+    server -> client5: Login Successful
+    server -> client6: Login Successful
+    server -> client7: Login Successful
+    server -> client8: Login Successful
+    server -> client9: Login Successful
+    server -> client10: Login Successful
+    
+    alt client1 sends message 
+        client1 -> server: Send Message
+        server -> client2: Receive Message
+        server -> client3: Receive Message
+        server -> client4: Receive Message
+        server -> client5: Receive Message
+        server -> client6: Receive Message
+        server -> client7: Receive Message
+        server -> client8: Receive Message
+        server -> client9: Receive Message
+        server -> client10: Receive Message
+    end
+    
+    alt client1 logs out
+        client1 -> server: Logout
+        server -> client1: Logout Successful
+    end
+
+    alt server shuts down and disconnects everyone
+        server -> client1: Server Shutdown
+        server -> client2: Server Shutdown
+        server -> client3: Server Shutdown
+        server -> client4: Server Shutdown
+        server -> client5: Server Shutdown
+        server -> client6: Server Shutdown
+        server -> client7: Server Shutdown
+        server -> client8: Server Shutdown
+        server -> client9: Server Shutdown
+        server -> client10: Server Shutdown
+    end
+    
 else invalidPassword
-    serverModerator -> user1: loginUnsuccessful
+    server -> client1: Login Unsuccessful
 end
 
 @enduml
