@@ -1,3 +1,4 @@
+package src;
 /*
 This class represents the client side networking component
 of the Secure Chat system! It handles connecting to the server,
@@ -32,7 +33,7 @@ public class Client {
     private String username;
     // Server IP address and port
     // NOTE: THESE MUST MATCH WHOEVER IS HOSTING SERVER
-    private static final String IP_ADDRESS = "10.1.37.88";
+    private static final String IP_ADDRESS = "10.2.130.128";
     private static final int port = 1111;
 
     // Connect client to server and creates new thread to start listening

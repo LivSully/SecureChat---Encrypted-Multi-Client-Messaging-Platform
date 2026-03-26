@@ -1,3 +1,4 @@
+package src;
 
 //this one
 import java.io.IOException;
@@ -14,6 +15,8 @@ public class ChatClientGUI extends JFrame {
     private JButton clearButton;
     private JButton logoutButton;
     private JLabel statusIndicator;
+    // ChatController required for the MVC design pattern
+    private ChatController controller;
 
     public ChatClientGUI(String username) {
         this.username = username;
@@ -40,14 +43,16 @@ public class ChatClientGUI extends JFrame {
 
         inputField.addActionListener(e -> {
             String msg = inputField.getText();
-            client.sendMessage(msg);// plaintext → encrypted inside client
             // Sends the message to the ChatController class rather than directly to the
+            // Client class to satisfy the MVC design pattern
+            controller.sendMessage(msg);
             inputField.setText("");
         });
         sendButton.addActionListener(e -> {
             String msg = inputField.getText();
-            client.sendMessage(msg);
             // Sends the message to the ChatController class rather than directly to the
+            // Client class to satisfy the MVC design pattern
+            controller.sendMessage(msg);
             inputField.setText("");
         });
         clearButton.addActionListener(e -> {
@@ -55,8 +60,9 @@ public class ChatClientGUI extends JFrame {
         });
         logoutButton.addActionListener(e -> {
             if (client != null) {
-                client.disconnect();
                 // Calls the disconnect method in the ChatController class rather than directly
+                // in the Client class to satisfy the MVC design pattern
+                controller.disconnect();
             }
             statusIndicator.setBackground(Color.RED);
             appendMessage("You have logged out");
@@ -82,6 +88,7 @@ public class ChatClientGUI extends JFrame {
 
     public void connect(String host, int port) throws IOException {
         client = new Client(host, port, this, username);
+        controller = new ChatController(client);
         statusIndicator.setBackground(Color.GREEN);
     }
 
@@ -95,4 +102,24 @@ public class ChatClientGUI extends JFrame {
 
     // Class required to satisfy the MVC design pattern which separates the GUI
     // class and its responsibilities from the Client class and its responsibilities
+    public class ChatController {
+        private Client client;
+
+        // Constructor method
+        public ChatController(Client client) {
+            this.client = client;
+        }
+
+        // Method that sends the encrypted message to the Client class to satisfy the
+        // MVC design pattern
+        public void sendMessage(String message) {
+            client.sendMessage(message);
+        }
+
+        // Method that calls the disconnect method in the Client class to satisfy the
+        // MVC design pattern
+        public void disconnect() {
+            client.disconnect();
+        }
+    }
 }
