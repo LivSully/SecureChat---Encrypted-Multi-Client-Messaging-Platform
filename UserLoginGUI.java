@@ -188,11 +188,14 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         if (success) {
             showMessage("Login Successful", "Welcome, " + username + "!", JOptionPane.INFORMATION_MESSAGE);
             try {
+                // Connect FIRST before creating the window
                 ChatClientGUI chatGUI = new ChatClientGUI(username);
-                chatGUI.connect("10.1.37.88", 1111);
-                dispose();
+                chatGUI.connect("10.1.37.88", 1111); // throws IOException if server is down
+                chatGUI.setVisible(true);
+                dispose(); // only runs if connect() succeeded
             } catch (IOException e) {
                 showMessage("Error", "Failed to connect to chat server.", JOptionPane.ERROR_MESSAGE);
+                // chatGUI should not remain visible if connection failed
             }
             // If the credentials are invalid, an error message is shown
         } else {
