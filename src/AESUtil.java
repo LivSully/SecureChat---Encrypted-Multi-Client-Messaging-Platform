@@ -19,7 +19,7 @@ public class AESUtil {
      */
     public static String encrypt(String data) throws Exception {
         SecretKeySpec key = new SecretKeySpec(KEY.getBytes(), ALGORITHM);
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, key);
         byte[] encrypted = cipher.doFinal(data.getBytes());
         return Base64.getEncoder().encodeToString(encrypted); // Encode to Base64 for safe transmission
@@ -33,7 +33,7 @@ public class AESUtil {
      */
     public static String decrypt(String encryptedData) throws Exception {
         SecretKeySpec key = new SecretKeySpec(KEY.getBytes(), ALGORITHM);
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, key);
         byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encryptedData));
         return new String(decrypted);
