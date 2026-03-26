@@ -34,7 +34,7 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 20, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
-
+        // Creating, resizing, and adding logo to the top of the login GUI
         ImageIcon logo = new ImageIcon("CoolSecureChatLogo.png");
         Image img = logo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         JLabel lblLogo = new JLabel(new ImageIcon(img));
@@ -46,9 +46,9 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         JLabel lblUser = new JLabel("Username:");
         txtUser = new JTextField(25);
 
+        // Status Labels for Username and Password Validation
         lblUserStatus = new JLabel(" ");
         lblPassStatus = new JLabel(" ");
-
         Dimension statusSize = new Dimension(320, 20);
         lblUserStatus.setPreferredSize(statusSize);
         lblPassStatus.setPreferredSize(statusSize);
@@ -60,6 +60,7 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         gbc.gridy = 3;
         mainPanel.add(lblPassStatus, gbc);
 
+        // Adding Document Listeners to validate input in real-time
         txtUser.getDocument().addDocumentListener(new DocumentListener() {
 
             public void insertUpdate(DocumentEvent e) {
@@ -87,6 +88,7 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         txtPass = new JPasswordField(25);
         txtPass.setEchoChar('*'); // Mask password input
 
+        // Adding Document Listener to validate password in real-time
         txtPass.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 validatePassword();
@@ -130,6 +132,7 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         }
     }
 
+    // Methods to Validate Username and Password with Real-Time Feedback
     private void validateUsername() {
         String username = txtUser.getText();
 
@@ -142,6 +145,8 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         }
     }
 
+    // Password must be 8-20 characters, contain at least one uppercase letter, one
+    // lowercase letter, one digit, and one special character
     private void validatePassword() {
         String password = new String(txtPass.getPassword());
 
@@ -171,6 +176,8 @@ public class UserLoginGUI extends JFrame implements ActionListener {
 
         boolean success = false;
 
+        // Reads the credentials from credentials.txt and checks if the entered username
+        // and password match any of the stored credentials
         try (Scanner sc = new Scanner(new File("credentials.txt"))) {
             while (sc.hasNextLine()) {
                 String[] credentials = sc.nextLine().split(",");
@@ -183,6 +190,8 @@ public class UserLoginGUI extends JFrame implements ActionListener {
             showMessage("Error", "User data file not found!", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        // If the credentials are valid, a successful message is shown and a new window
+        // for chatting is opened
         if (success) {
             showMessage("Login Successful", "Welcome, " + username + "!", JOptionPane.INFORMATION_MESSAGE);
             try {
@@ -192,6 +201,7 @@ public class UserLoginGUI extends JFrame implements ActionListener {
             } catch (IOException e) {
                 showMessage("Error", "Failed to connect to chat server.", JOptionPane.ERROR_MESSAGE);
             }
+            // If the credentials are invalid, an error message is shown
         } else {
             showMessage("Login Failed", "Invalid username or password.", JOptionPane.ERROR_MESSAGE);
         }
