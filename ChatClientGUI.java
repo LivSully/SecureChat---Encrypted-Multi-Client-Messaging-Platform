@@ -1,3 +1,5 @@
+
+//this one
 import java.io.IOException;
 
 import javax.swing.*;
@@ -12,85 +14,75 @@ public class ChatClientGUI extends JFrame {
     private JButton clearButton;
     private JButton logoutButton;
     private JLabel statusIndicator;
+    // ChatController required for the MVC design pattern
     private ChatController controller;
 
     public ChatClientGUI(String username) {
         this.username = username;
 
-        setTitle("Cool Secure Chat - " + username);
-        setLayout(new BorderLayout());
-
-        // Logo
-        ImageIcon logo = new ImageIcon(getClass().getResource("/CoolSecureChatLogo.png"));
+        ImageIcon logo = new ImageIcon("CoolSecureChatLogo.png");
         Image img = logo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         JLabel lblLogo = new JLabel(new ImageIcon(img));
         lblLogo.setHorizontalAlignment(JLabel.CENTER);
         add(lblLogo, BorderLayout.NORTH);
 
-        // Chat area
         chatArea = new JTextArea();
         chatArea.setEditable(false);
-        add(new JScrollPane(chatArea), BorderLayout.CENTER);
-
-        // Input field and buttons
         inputField = new JTextField();
+
         sendButton = new JButton("Send");
         clearButton = new JButton("Clear");
         logoutButton = new JButton("Logout");
 
-        // Status indicator (green = connected, red = disconnected)
         statusIndicator = new JLabel();
         statusIndicator.setOpaque(true);
         statusIndicator.setBackground(Color.RED);
         statusIndicator.setPreferredSize(new Dimension(15, 15));
         statusIndicator.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        // Send on Enter key in input field
-        inputField.addActionListener(e -> sendMessage());
-        sendButton.addActionListener(e -> sendMessage());
-
-        clearButton.addActionListener(e -> chatArea.setText(""));
-
+        inputField.addActionListener(e -> {
+            String msg = inputField.getText();
+            // Sends the message to the ChatController class rather than directly to the
+            // Client class to satisfy the MVC design pattern
+            controller.sendMessage(msg);
+            inputField.setText("");
+        });
+        sendButton.addActionListener(e -> {
+            String msg = inputField.getText();
+            // Sends the message to the ChatController class rather than directly to the
+            // Client class to satisfy the MVC design pattern
+            controller.sendMessage(msg);
+            inputField.setText("");
+        });
+        clearButton.addActionListener(e -> {
+            chatArea.setText("");
+        });
         logoutButton.addActionListener(e -> {
-            if (controller != null) {
+            if (client != null) {
+                // Calls the disconnect method in the ChatController class rather than directly
+                // in the Client class to satisfy the MVC design pattern
                 controller.disconnect();
             }
             statusIndicator.setBackground(Color.RED);
-            appendMessage("You have logged out.");
-            // Disable input after logout
-            inputField.setEnabled(false);
-            sendButton.setEnabled(false);
+            appendMessage("You have logged out");
         });
-
-        JPanel statusPanel = new JPanel();
-        statusPanel.add(statusIndicator);
-
+        add(new JScrollPane(chatArea), BorderLayout.CENTER);
+        add(inputField, BorderLayout.SOUTH);
+        JPanel bottomPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel();
+        JPanel statusPanel = new JPanel();
+        // JPanel topPanel = new JPanel(new BorderLayout());
         buttonPanel.add(sendButton);
         buttonPanel.add(clearButton);
         buttonPanel.add(logoutButton);
-
-        JPanel bottomPanel = new JPanel(new BorderLayout());
+        // topPanel.add(lblLogo);
         bottomPanel.add(statusPanel, BorderLayout.WEST);
         bottomPanel.add(inputField, BorderLayout.CENTER);
         bottomPanel.add(buttonPanel, BorderLayout.EAST);
-
+        statusPanel.add(statusIndicator);
         add(bottomPanel, BorderLayout.SOUTH);
-
         setSize(400, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // NOTE: setVisible(true) is intentionally NOT called here.
-        // It is called by UserLoginGUI only after a successful connection.
-    }
-
-    private void sendMessage() {
-        if (controller == null)
-            return;
-        String msg = inputField.getText().trim();
-        if (!msg.isEmpty()) {
-            controller.sendMessage(msg);
-            inputField.setText("");
-        }
+        setVisible(true);
     }
 
     public void connect(String host, int port) throws IOException {
@@ -107,17 +99,24 @@ public class ChatClientGUI extends JFrame {
         return statusIndicator;
     }
 
+    // Class required to satisfy the MVC design pattern which separates the GUI
+    // class and its responsibilities from the Client class and its responsibilities
     public class ChatController {
         private Client client;
 
+        // Constructor method
         public ChatController(Client client) {
             this.client = client;
         }
 
+        // Method that sends the encrypted message to the Client class to satisfy the
+        // MVC design pattern
         public void sendMessage(String message) {
             client.sendMessage(message);
         }
 
+        // Method that calls the disconnect method in the Client class to satisfy the
+        // MVC design pattern
         public void disconnect() {
             client.disconnect();
         }
